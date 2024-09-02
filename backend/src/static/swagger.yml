@@ -1,0 +1,237 @@
+openapi: 3.0.1
+info:
+  title: Language Model Interface API
+  description: A simple API to interact with a small language model
+servers:
+  - url: "/"
+paths:
+  "/login/":
+    post:
+      summary: Log in to the API
+      description: Send login credentials (username and password) to get an authentication token
+      operationId: login
+      requestBody:
+        description: Login credentials
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: default_user
+                  description: Login username
+                password:
+                  type: string
+                  example: default_password
+                  description: Login password
+      responses:
+        "200":
+          description: Ok. User correctly logged in.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: Authentication token
+        "400":
+          description: Bad request, some parameter was invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid argument argument_name=argument_value
+                    description: Incorrect argument
+        "401":
+          description: Unauthorized. Incorrect credentials.
+  "/translate/":
+    post:
+      summary: Translate a text
+      description: Translate's a given text to the specified language
+      operationId: translate
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Text to translate and language to translate to.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: str
+                  example: Hallo Welt! Dies ist ein Übersetzung Beispiel.
+                  description: Text to be translated.
+                language:
+                  type: str
+                  example: English
+                  description: Language to translate the text to.
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  translation:
+                    type: string
+                    description: Translated text
+        "400":
+          description: Bad request, some parameter was invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid argument argument_name=argument_value
+                    description: Incorrect argument
+        "401":
+          description: Unauthorized
+        "500":
+          description: Could not complete request due to an internal server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error when trying to get the prediction
+  "/spelling/":
+    post:
+      summary: Spell-check a text
+      description: Correct the spelling of any given text
+      operationId: spelling
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Text to correct.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: str
+                  example: Thiz is a test wit speling mistakess.
+                  description: Text to fix the spelling of
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  correction:
+                    type: string
+                    description: Corrected text
+        "400":
+          description: Bad request, some parameter was invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid argument argument_name=argument_value
+                    description: Incorrect argument
+        "401":
+          description: Unauthorized
+        "500":
+          description: Could not complete request due to an internal server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error when trying to get the prediction
+  "/story/":
+    post:
+      summary: Generate a story
+      description: Creates a story with the given information
+      operationId: story
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Story parameters.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                characters:
+                  type: array
+                  example: [
+                    {"name": "Aria", "role": "hero", "traits": ["brave", "kind"]},
+                    {"name": "Drako", "role": "villain", "traits": ["cunning", "ruthless"]}
+                  ]
+                  description: Description of the character, includes the name, role and personality traits.
+                setting:
+                  type: text
+                  example: "A mystical forest in the kingdom of Eldoria, during a time of war"
+                  description: Description of the setting where the story will take place
+                theme:
+                  type: text
+                  example: "The importance of friendship and loyalty"
+                  description: Description of what the story should be about
+                genre:
+                  type: text
+                  example: "Fantasy"
+                  description: Genre of the story, it can be any text value, the model will interpret it
+
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  correction:
+                    type: string
+                    description: Corrected text
+        "400":
+          description: Bad request, some parameter was invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid argument argument_name=argument_value
+                    description: Incorrect argument
+        "401":
+          description: Unauthorized
+        "500":
+          description: Could not complete request due to an internal server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error when trying to get the prediction
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

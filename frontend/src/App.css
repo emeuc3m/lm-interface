@@ -1,0 +1,59 @@
+/* App.css */
+body, html {
+margin: 0;
+padding: 0;
+height: 100%;
+font-family: Overpass, sans-serif;
+}
+
+.app-container {
+display: flex;
+height: 100vh; /* Full viewport height */
+}
+
+
+.content {
+    display: "flex"
+}
+
+.content {
+    margin-left: 210px;
+    height: 100vh;
+    width: 100%;
+    padding: 1rem;
+    padding-top: 1.5rem;
+    transition: 0.4s all linear;
+    background-color: #1e2b2e;
+}
+
+.content h1{
+    color: #01ecb4;
+    font-weight: bold;
+}
+
+.disabled-btn{
+    margin-top: 15px;
+    color: black;
+    background-color: #08b48c48;
+}
+.enabled-btn{
+    margin-top: 15px;
+    color: white;
+    background-color: #1cc7e6;
+}
+
+.card{
+    color: white;
+    background-color: #1f433f;
+    margin-top: 2.5rem;
+    width: 120vh;
+}
+
+.card-wide{
+    display: flex;
+    flex-direction: row;
+}
+
+.card-elem{
+    width: 60vh
+}
